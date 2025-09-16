@@ -65,13 +65,24 @@ a {
 	position: relative;
 	display: block;
 	line-height: 0;
+	width: 100%;
+	height: auto;
 }
 
-.mapImage {
+.backMap img:first-child {
+	position: relative;
 	display: block;
 	width: 100%;
 	height: auto;
-	}
+}
+
+.backMap img:not(:first-child) {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+}
+
 
 .dotBtn {
     position: absolute;
