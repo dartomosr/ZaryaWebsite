@@ -69,6 +69,34 @@ a {
 	height: auto;
 }
 
+#blackMap {
+	visibility: hidden;
+	opacity: 0;
+	transition: opacity 0.6s ease;
+}
+
+#blackMap.visible {
+	visibility: visible;
+	opacity: 1;
+}
+
+#BlackBtn {
+	position: absolute;
+	right: 40px;
+	bottom: 150px;
+
+	text-align: center;
+	padding: 10px 20px;
+	font-size: 1.2vw;
+	font-family: Molot;
+	color: #ffffff;
+
+	border-radius: 10px;
+	box-shadow: 10px 5px 20px rgb(0, 0, 0);
+
+	background-color: #280b0b;
+}
+
 .backMap img:first-child {
 	position: relative;
 	display: block;
