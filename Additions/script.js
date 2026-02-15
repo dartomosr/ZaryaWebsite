@@ -52,3 +52,13 @@ dotsData.forEach((dot, index) => {
 
   container.appendChild(btn);
 });
+
+const btn = document.getElementById('BlackBtn');
+const blackImg = document.getElementById('blackMap');
+
+btn.addEventListener('click', () => {
+  blackImg.classList.toggle('visible');
+  btn.textContent = blackImg.classList.contains('visible')
+    ? 'Скрыть область ЧК'
+    : 'Показать область ЧК';
+});
