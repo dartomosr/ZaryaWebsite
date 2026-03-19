@@ -350,10 +350,10 @@ a {
 
 @media (max-width: 768px) {
 	.downText {
-    text-align: center;
-    font-family: 'Molot';
-    font-size: 7vw;
-    color: #000000;
+		text-align: center;
+		font-family: 'Molot';
+		font-size: 6vw;
+		color: #000000;
 	}
 
 	.topLineLogo {
