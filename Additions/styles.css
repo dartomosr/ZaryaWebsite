@@ -164,7 +164,7 @@ a {
 	position: relative;
 
 	font-family: 'Rubik';
-	font-size: clamp(0.5rem, 3vw, 4rem);
+	font-size: 3vw;
 
 	color: #ffffff;
 	text-shadow: 0px 5px 10px rgb(44, 9, 39);
@@ -349,6 +349,18 @@ a {
 }
 
 @media (max-width: 768px) {
+	.Logo {
+		width: 5.5vw;
+	}
+
+	.descryptionOpenText {
+		font-size: 8vw;
+	}
+
+	.downBlock {
+		font-size: 5vw;
+	}
+
 	.downText {
 		text-align: center;
 		font-family: 'Molot';
@@ -359,12 +371,13 @@ a {
 	.topLineLogo {
 		position: absolute;
 		left: 1vw;
-		width: 6vw;
+		width: 8vw;
 		height: auto;
 	}
 
 	.topLineAndText {
-		height: 7vw;
+		height: 10vw;
+		font-size: 5.5vw;
 	}
 
     .BlockOfDescryption {
@@ -402,7 +415,7 @@ a {
 		position: relative;
 
 		font-family: 'Rubik';
-		font-size: clamp(0.5rem, 5vw, 4rem);
+		font-size: 6vw;
 
 		color: #ffffff;
 		text-shadow: 0px 5px 10px rgb(44, 9, 39);
@@ -414,9 +427,9 @@ a {
 		margin-top: 1vw;
 
 		font-family: 'Rubik';
-		font-size: clamp(0.1rem, 4vw, 2.5rem);
+		font-size: 4.5vw;
 
 		color: #ffffff;
-		text-shadow: 0px 5px 10px rgb(44, 9, 39);
+		text-shadow: 0px 6px 10px rgb(44, 9, 39);
 	}
 }
