@@ -317,6 +317,7 @@ a {
 }
 
 .down {
+    position: relative;
     display: flex;
     align-items: flex-end;
     justify-content: space-between;
@@ -324,6 +325,21 @@ a {
     background-color: #f6a82c;
     padding: 1vw;
     box-sizing: border-box;
+}
+
+.downCenter {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5vw;
+}
+
+.downText {
+    text-align: center;
+    font-family: 'Molot';
+    font-size: 5vw;
+    color: #000000;
+    margin: 0;
 }
 
 .downPic {
@@ -336,9 +352,17 @@ a {
     gap: 2vw;
 }
 
+.downButtons .downSocialIcon,
 .downButtons img {
-    width: 6vw;
+    width: 4vw;
     height: auto;
+}
+
+@media (max-width: 768px) {
+    .downButtons .downSocialIcon,
+    .downButtons img {
+        width: 6vw;
+    }
 }
 
 .downText {
@@ -346,6 +370,24 @@ a {
     font-family: 'Molot';
     font-size: 5vw;
     color: #000000;
+}
+
+.downContact {
+    font-family: 'Rubik';
+    font-size: 2.2vw;
+    font-weight: 600;
+    color: #000000;
+    text-align: center;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin: 0 0 0.3vw;
+    min-width: 0;
+}
+
+.downContact a {
+    color: #000000;
+    text-decoration: underline;
+    font-weight: 700;
 }
 
 @media (max-width: 768px) {
@@ -366,6 +408,13 @@ a {
 		font-family: 'Molot';
 		font-size: 6vw;
 		color: #000000;
+	}
+
+	.downContact {
+		font-family: 'Rubik';
+		font-size: 4.2vw;
+		text-align: center;
+		margin-top: 2vw;
 	}
 
 	.topLineLogo {
