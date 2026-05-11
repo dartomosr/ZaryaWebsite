@@ -123,9 +123,29 @@ dotsData.forEach((dot, index) => {
 const btn = document.getElementById('BlackBtn');
 const blackImg = document.getElementById('blackMap');
 
-btn.addEventListener('click', () => {
-  blackImg.classList.toggle('visible');
-  btn.textContent = blackImg.classList.contains('visible')
-    ? 'Скрыть область ЧК'
-    : 'Показать область ЧК';
-});
+if (btn && blackImg) {
+  btn.addEventListener('click', () => {
+    blackImg.classList.toggle('visible');
+    btn.textContent = blackImg.classList.contains('visible')
+      ? 'Скрыть область ЧК'
+      : 'Показать область ЧК';
+  });
+}
+
+(function initScrollReveal() {
+  const revealItems = document.querySelectorAll('.reveal');
+  if (!revealItems.length) return;
+
+  const observer = new IntersectionObserver((entries, obs) => {
+    entries.forEach((entry) => {
+      if (!entry.isIntersecting) return;
+      entry.target.classList.add('is-visible');
+      obs.unobserve(entry.target);
+    });
+  }, {
+    threshold: 0.15,
+    rootMargin: '0px 0px -8% 0px'
+  });
+
+  revealItems.forEach((item) => observer.observe(item));
+})();
