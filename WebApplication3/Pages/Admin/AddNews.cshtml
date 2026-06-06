@@ -1,0 +1,85 @@
+@page "/admin/add-news"
+@model WebApplication3.Pages.Admin.AddNewsModel
+@{
+    ViewData["Title"] = "Добавить в ленту";
+}
+
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/Additions/styles.css">
+  <link rel="icon" type="image/webp" href="/Additions/Media/Zarya-Black.webp" media="(prefers-color-scheme: light)">
+  <link rel="icon" type="image/webp" href="/Additions/Media/Zarya-White.webp" media="(prefers-color-scheme: dark)">
+  <title>Добавить в ленту</title>
+</head>
+
+<body>
+  <div class="topLineAndText">
+      <div class="buttonGroupPosition">
+          <a href="https://t.me/zarya_tm" target="_blank" rel="noopener noreferrer">
+              <img src="/Additions/Media/tg logo 96.png" alt="TG" class="Logo">
+          </a>
+          <a href="https://vk.com/zaryamor" target="_blank" rel="noopener noreferrer">
+              <img src="/Additions/Media/Vk logo 96.png" alt="VK" class="Logo">
+          </a>
+      </div>
+      <img src="/Additions/Media/Zarya-Black.webp" alt="Лого" class="topLineLogo">
+      <nav class="topNav" aria-label="Главная навигация">
+          <a href="/main" class="topNavLink">Главная</a>
+          <a href="/news.html" class="topNavLink">Новостная лента</a>
+      </nav>
+  </div>
+
+  <main class="newsPage">
+    <section class="newsHero">
+      <h1 class="newsTitle">Добавить в ленту</h1>
+      <p class="newsLead">Роль сейчас выдается в C# автоматически: @User.Identity?.Name / Admin.</p>
+    </section>
+
+    @if (!string.IsNullOrWhiteSpace(Model.Message))
+    {
+      <div class="adminMessage">@Model.Message</div>
+    }
+
+    <form method="post" class="adminNewsForm">
+      <label>
+        ID новости
+        <input asp-for="Input.Id" placeholder="my-news-id">
+      </label>
+
+      <label>
+        Дата
+        <input asp-for="Input.Date" placeholder="24.05.2026">
+      </label>
+
+      <label>
+        Заголовок
+        <input asp-for="Input.Title" required>
+      </label>
+
+      <label>
+        Краткое описание для карточки
+        <textarea asp-for="Input.Description" rows="3" required></textarea>
+      </label>
+
+      <label>
+        Путь к картинке
+        <input asp-for="Input.Image" placeholder="Additions/Media/biggame.webp">
+      </label>
+
+      <label>
+        Полный текст
+        <textarea asp-for="Input.Content" rows="10" required></textarea>
+      </label>
+
+      <button type="submit" class="adminSubmitButton">Добавить новость</button>
+    </form>
+  </main>
+
+  <script src="/Additions/script.js"></script>
+</body>
+
+</html>

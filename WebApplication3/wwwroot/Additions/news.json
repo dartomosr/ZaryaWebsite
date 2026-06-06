@@ -1,0 +1,76 @@
+[
+  {
+    "id": "first-report",
+    "date": "24.05.2026",
+    "title": "Открыта первая сводка",
+    "description": "Здесь будет появляться информация о разработке, новых материалах и ближайших публикациях проекта.",
+    "image": "Additions/Media/biggame.webp",
+    "content": [
+      "Здесь будет полное описание новости: подробности разработки, новые материалы проекта, планы команды и важные изменения, которые не помещаются в короткую карточку ленты.",
+      "Такой формат удобен для больших публикаций. В ленте остается краткий анонс, а на этой странице можно разместить полный текст, дополнительные изображения и подробные заметки.",
+      "Позже этот текст можно заменить на реальную статью о ходе разработки, обновлениях мира, персонажах, механиках или любых других материалах проекта."
+    ]
+  },
+  {
+    "id": "world-materials",
+    "date": "Скоро",
+    "title": "Материалы мира",
+    "description": "Подготовим заметки о городах, фракциях и событиях, которые формируют революцию в мире Эос.",
+    "image": "Additions/Media/dotBase.png",
+    "content": [
+      "Здесь появится полный текст новости о мире игры."
+    ]
+  },
+  {
+    "id": "team-diary",
+    "date": "Скоро",
+    "title": "Дневник команды",
+    "description": "Короткие отчеты о прогрессе, скриншоты, планы и важные изменения будут собраны в одной ленте.",
+    "image": "Additions/Media/GG.webp",
+    "content": [
+      "Здесь появится полный текст дневника команды."
+    ]
+  },
+  {
+    "id": "myy",
+    "date": "05.05.2020",
+    "title": "Супер жесть",
+    "description": "Короткие отчеты о прогрессе, скриншоты, планы и важные изменения будут собраны в одной ленте.",
+    "image": "Additions/Media/Fire.gif",
+    "content": [
+      "Здесь появится полный текст дневника команды. ,dookodwkowdkdwp pwldpdwkldpw pwdldwplwd pld wplwd pldwplwd plw pwd pwd ldw plwd lpdw p lp Здесь появится полный текст дневника команды. ,dookodwkowdkdwp pwldpdwkldpw pwdldwplwd pld wplwd pldwplwd plw pwd pwd ldw plwd lpdw p lp Здесь появится полный текст дневника команды. ,dookodwkowdkdwp pwldpdwkldpw pwdldwplwd pld wplwd pldwplwd plw pwd pwd ldw plwd lpdw p lp Здесь появится полный текст дневника команды. ,dookodwkowdkdwp pwldpdwkldpw pwdldwplwd pld wplwd pldwplwd plw pwd pwd ldw plwd lpdw p lp",
+      "Здесь будет полное описание новости: подробности разработки, новые материалы проекта, планы команды и важные изменения, которые не помещаются в короткую карточку ленты.",
+      "Здесь появится полный текст дневника команды. ,dookodwkowdkdwp pwldpdwkldpw pwdldwplwd pld wplwd pldwplwd plw pwd pwd ldw plwd lpdw p lp Здесь появится полный текст дневника команды. ,dookodwkowdkdwp pwldpdwkldpw pwdldwplwd pld wplwd pldwplwd plw pwd pwd ldw plwd lpdw p lp Здесь появится полный текст дневника команды. ,dookodwkowdkdwp pwldpdwkldpw pwdldwplwd pld wplwd pldwplwd plw pwd pwd ldw plwd lpdw p lp Здесь появится полный текст дневника команды. ,dookodwkowdkdwp pwldpdwkldpw pwdldwplwd pld wplwd pldwplwd plw pwd pwd ldw plwd lpdw p lp"
+    ]
+  },
+  {
+    "id": "add-server",
+    "date": "24.05.2026",
+    "title": "Добавление сервера",
+    "description": "Добавление сервера ASP Net Core",
+    "image": "Additions\\Media\\Background-map.webp",
+    "content": [
+      "Добавление сервера ASP Net Core, тепрь можно заходить из под админки"
+    ]
+  },
+  {
+    "id": "fdaknasouhahu",
+    "date": "24.05.2026",
+    "title": "lkjuhsdsjksdmkidahujspkmdopjkas",
+    "description": "QDSAS",
+    "image": "Additions\\Media\\Fire.gif",
+    "content": [
+      "UOH"
+    ]
+  },
+  {
+    "id": "ksmdsnsd",
+    "date": "24.05.2026",
+    "title": "12ew",
+    "description": "12121332",
+    "image": "Additions\\Media\\biggame.webp",
+    "content": [
+      "1231323213121"
+    ]
+  }
+]
