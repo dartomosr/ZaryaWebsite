@@ -78,9 +78,7 @@
     const content = detail.querySelector('.newsDetailBody');
     if (content) {
       content.querySelectorAll('p').forEach((paragraph) => paragraph.remove());
-      newsItem.content.forEach((paragraphText) => {
-        content.appendChild(createTextElement('p', '', paragraphText));
-      });
+      content.appendChild(createTextElement('p', '', newsItem.content));
     }
   }
 

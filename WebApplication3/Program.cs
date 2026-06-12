@@ -21,7 +21,7 @@ namespace WebApplication3
 
             app.Use(async (context, next) =>
             {
-                var role = context.Request.Query["user"].ToString();//"Admin";
+                var role = context.Request.Query["user"].ToString();
                 
                 if(Roles.Contains(role))
                 {
