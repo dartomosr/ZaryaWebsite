@@ -1,70 +1,101 @@
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using System.Security.Principal;
 
-namespace WebApplication3
+namespace ZaryaSite;
+
+public class Program
 {
-    public class Program
+    public static List<string> Roles = ["User", "Admin"];
+
+    public static void Main(string[] args)
     {
+        var builder = WebApplication.CreateBuilder(args);
 
-        public static List<string> Roles = ["User", "Admin"];
-
-        public static void Main(string[] args)
+        builder.Services.AddControllers();
+        builder.Services.AddRazorPages(options =>
         {
-            var builder = WebApplication.CreateBuilder(args);
+            options.Conventions.AuthorizeFolder("/Admin", "AdminOnly");
+        });
 
-            builder.Services.AddControllers();
-            builder.Services.AddRazorPages();
-            builder.Services.AddAuthorization();
-
-            var app = builder.Build();
-
-            app.UseStaticFiles();
-
-            app.Use(async (context, next) =>
+        builder.Services
+            .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+            .AddCookie(options =>
             {
-                var role = context.Request.Query["user"].ToString();
-                
-                if(Roles.Contains(role))
-                {
-                    context.Response.Cookies.Append("User", role);
-                }
-                else
-                {
-                    role = context.Request.Cookies["User"] ?? "User";
-                }
-
-                
-                var claims = new[]
-                {
-                    new Claim(ClaimTypes.Role, role)
-                };
-
-                context.User = new ClaimsPrincipal(new ClaimsIdentity(claims, "FakeAdmin"));
-                await next();
+                options.LoginPath = "/AdminAuthorization";
+                options.AccessDeniedPath = "/main";
+                options.Cookie.Name = "Admin.Authentication";
+                options.Cookie.HttpOnly = true;
+                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                options.Cookie.SameSite = SameSiteMode.Lax;
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
+                options.SlidingExpiration = true;
             });
 
-            app.UseAuthorization();
-
-            app.MapRazorPages();
-            app.MapControllers();
-
-            app.MapGet("/api/current-user", (ClaimsPrincipal user) => new
+        builder.Services.AddAuthorizationBuilder()
+            .AddPolicy("AdminOnly", police =>
             {
-                name = user.Identity?.Name,
-                isAdmin = user.IsInRole("Admin")
+                police.RequireAuthenticatedUser();
+                police.RequireRole("Admin");
+            })
+            .AddPolicy("CheckAuthorization", police =>
+            {
+                police.RequireAuthenticatedUser();
             });
 
-            app.MapGet("main", async context =>
-            {
-                await context.Response.SendFileAsync(Path.Combine(app.Environment.WebRootPath, "index.html"));
-            });
+        var app = builder.Build();
 
-            app.MapFallback(context =>
+        app.UseStaticFiles();
+        app.UseAuthentication();
+
+        app.MapGet("/AdminAuthorization", async context =>
+        {
+            var pass = context.Request.Query["pass"].ToString();
+            
+            if(pass != "111")
             {
                 context.Response.Redirect("/main");
-                return Task.CompletedTask;
-            });
+                return;
+            }
+            var claims = new[]
+            {
+                new Claim(ClaimTypes.Role, "Admin")
+            };
 
-            app.Run();
-        }
+            var claimsIdentity = new ClaimsIdentity(
+                claims,
+                CookieAuthenticationDefaults.AuthenticationScheme);
+
+            var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
+
+            await context.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
+            context.Response.Redirect("/main");
+            return;
+        });
+        
+        app.UseAuthorization();
+        app.MapRazorPages();
+        app.MapControllers();
+
+        app.MapGet("/api/current-user", (ClaimsPrincipal user) => new
+        {
+            name = user.Identity?.Name,
+            isAdmin = user.IsInRole("Admin")
+        });
+
+        app.MapGet("main", async context =>
+        {
+            await context.Response.SendFileAsync(Path.Combine(app.Environment.WebRootPath, "index.html"));
+        });
+
+        app.MapFallback(context =>
+        {
+            context.Response.Redirect("/main");
+            return Task.CompletedTask;
+        });
+
+        app.Run();
     }
 }
