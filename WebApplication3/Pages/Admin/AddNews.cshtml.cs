@@ -1,11 +1,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using System.IO;
-using System.Text.Json;
 using System.Text.Json.Serialization;
 using ZaryaSite;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace WebApplication3.Pages.Admin;
 

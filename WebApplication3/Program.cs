@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Security.Claims;
 using System.Security.Principal;
 
@@ -8,7 +8,12 @@ namespace ZaryaSite;
 
 public class Program
 {
-    public static List<string> Roles = ["User", "Admin"];
+    public static Dictionary<string, string> Saver = new() 
+    { 
+        { "IlyaKosov", "555" },
+        { "IlyaKrolenko", "111" },
+        { "DimaRakov", "333" } 
+    };
 
     public static void Main(string[] args)
     {
@@ -24,7 +29,7 @@ public class Program
             .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
             .AddCookie(options =>
             {
-                options.LoginPath = "/AdminAuthorization";
+                options.LoginPath = "/Admin/Login";
                 options.AccessDeniedPath = "/main";
                 options.Cookie.Name = "Admin.Authentication";
                 options.Cookie.HttpOnly = true;
@@ -50,15 +55,35 @@ public class Program
         app.UseStaticFiles();
         app.UseAuthentication();
 
-        app.MapGet("/AdminAuthorization", async context =>
+        app.MapGet("/Admin/Login", (IWebHostEnvironment env) =>
         {
-            var pass = context.Request.Query["pass"].ToString();
-            
-            if(pass != "111")
+            return Results.File(
+                Path.Combine(env.WebRootPath, "LoginAndRegister.html"),
+                "text/html; charset=utf-8");
+        });
+        
+        app.MapPost("/Admin/Login/Send", async (HttpContext context) =>
+        {
+            var form = await context.Request.ReadFormAsync();
+            var login = form["Login"].ToString();
+            var pass = form["Password"].ToString();
+            if (string.IsNullOrEmpty(login))
             {
-                context.Response.Redirect("/main");
-                return;
+                return Results.Redirect($"/Admin/Login?error=nullLogin&login={login}");
             }
+            else if(string.IsNullOrEmpty(pass))
+            {
+                return Results.Redirect($"/Admin/Login?error=nullPass&login={login}");
+            }
+            else if(!Saver.ContainsKey(login))
+            {
+                return Results.Redirect($"/Admin/Login?error=wrongLogin&login={login}");
+            }
+            else if (!Saver.TryGetValue(login, out var savedPass) || savedPass != pass)
+            {
+                return Results.Redirect($"/Admin/Login?error=wrongPass&login={login}");
+            }
+
             var claims = new[]
             {
                 new Claim(ClaimTypes.Role, "Admin")
@@ -71,8 +96,7 @@ public class Program
             var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
 
             await context.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
-            context.Response.Redirect("/main");
-            return;
+            return Results.Redirect("/main");
         });
         
         app.UseAuthorization();
