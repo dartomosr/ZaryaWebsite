@@ -75,6 +75,34 @@ body {
 	box-shadow: inset 0 -0.22vw 0 #f6a82c;
 }
 
+.adminLogoutForm {
+	display: flex;
+	margin: 0;
+}
+
+.adminLogoutButton {
+	width: 2.4vw;
+	min-width: 2.4vw;
+	padding: 0;
+	border: 0;
+	background-color: rgba(255, 255, 255, 0.08);
+	color: #f0f0f0;
+	cursor: pointer;
+}
+
+.adminLogoutButton:hover {
+	background-color: #f6a82c;
+	color: #111111;
+	box-shadow: inset 0 -0.22vw 0 #5c347e, 0 0.18vw 0.6vw rgba(246, 168, 44, 0.35);
+}
+
+.adminLogoutIcon {
+	display: block;
+	width: 1.35vw;
+	height: 1.35vw;
+	fill: currentColor;
+}
+
 .buttonGroupPosition {
 	display: flex;
 	position: absolute;
@@ -1158,6 +1186,17 @@ a {
 		padding: 0 2vw;
 		border-radius: 0.8vw;
 		font-size: 2.6vw;
+	}
+
+	.adminLogoutButton {
+		width: 6.5vw;
+		min-width: 6.5vw;
+		padding: 0;
+	}
+
+	.adminLogoutIcon {
+		width: 3.5vw;
+		height: 3.5vw;
 	}
 
 	.mainText {

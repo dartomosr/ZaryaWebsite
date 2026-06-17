@@ -52,7 +52,7 @@ public class AddNewsModel : PageModel
             return Page();
         }
 
-        var newsPath = Path.Combine(_environment.WebRootPath, "Additions", "news.json");
+        var newsPath = Path.Combine(_environment.WebRootPath, "Additions", "json", "news.json");
         var item = new NewsItem
         {
             Date = DateTime.Now.ToString("dd.MM.yyyy"),

@@ -42,13 +42,35 @@ const dotsData = [
         homeLink.href = '/admin/index.html';
       }
 
-      if (nav.querySelector('a[href="/admin/add-news"]')) return;
+      if (!nav.querySelector('a[href="/admin/add-news"]')) {
 
-      const link = document.createElement('a');
-      link.href = '/admin/add-news';
-      link.className = 'topNavLink';
-      link.textContent = 'Добавить новость в ленту';
-      nav.appendChild(link);
+        const link = document.createElement('a');
+        link.href = '/admin/add-news';
+        link.className = 'topNavLink';
+        link.textContent = 'Добавить новость в ленту';
+        nav.appendChild(link);
+      }
+
+      if (nav.querySelector('form[action="/Admin/Logout"]')) return;
+
+      const logoutForm = document.createElement('form');
+      logoutForm.method = 'post';
+      logoutForm.action = '/Admin/Logout';
+      logoutForm.className = 'adminLogoutForm';
+
+      const logoutButton = document.createElement('button');
+      logoutButton.type = 'submit';
+      logoutButton.className = 'topNavLink adminLogoutButton';
+      logoutButton.setAttribute('aria-label', '\u0412\u044b\u0439\u0442\u0438');
+      logoutButton.title = '\u0412\u044b\u0439\u0442\u0438';
+      logoutButton.innerHTML = `
+        <svg class="adminLogoutIcon" viewBox="0 0 1024 1024" aria-hidden="true" focusable="false">
+          <path d="M88 112c0-35.3 28.7-64 64-64h512c35.3 0 64 28.7 64 64v164H620V176H316l214 110c37.8 19.4 61.5 58.3 61.5 100.8V848H664V728h64v184c0 35.3-28.7 64-64 64H457.2c-10.2 0-20.2-2.4-29.2-7.1L121 811.2C100.8 800.8 88 780 88 757.3V112Z"/>
+          <path d="M772.7 209.4c25-25 65.5-25 90.5 0l132.1 132.1c31.3 31.3 31.3 81.9 0 113.2L863.2 586.8c-25 25-65.5 25-90.5 0s-25-65.5 0-90.5L828.9 440H572c-35.3 0-64-28.7-64-64s28.7-64 64-64h256.9l-56.2-56.1c-25-25-25-65.5 0-90.5Z"/>
+        </svg>`;
+
+      logoutForm.appendChild(logoutButton);
+      nav.appendChild(logoutForm);
     })
     .catch(() => {});
 })();
@@ -109,16 +131,16 @@ if (container) {
   if (!wrapper) return;
 
   const images = [
-    'Additions/Media/Posts/post1.webp',
-    'Additions/Media/Posts/post2.webp',
-    'Additions/Media/Posts/post3.webp',
-    'Additions/Media/Posts/post4.webp',
-    'Additions/Media/Posts/post5.webp',
-    'Additions/Media/Posts/post6.webp',
-    'Additions/Media/Posts/post7.webp',
-    'Additions/Media/Posts/post8.webp',
-    'Additions/Media/Posts/post9.webp',
-    'Additions/Media/Posts/post10.webp'
+    '/Additions/Media/Posts/post1.webp',
+    '/Additions/Media/Posts/post2.webp',
+    '/Additions/Media/Posts/post3.webp',
+    '/Additions/Media/Posts/post4.webp',
+    '/Additions/Media/Posts/post5.webp',
+    '/Additions/Media/Posts/post6.webp',
+    '/Additions/Media/Posts/post7.webp',
+    '/Additions/Media/Posts/post8.webp',
+    '/Additions/Media/Posts/post9.webp',
+    '/Additions/Media/Posts/post10.webp'
   ];
 
   const count = Math.min(5, images.length);

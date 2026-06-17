@@ -1,5 +1,5 @@
 (function initNews() {
-  const NEWS_URL = 'Additions/news.json';
+  const NEWS_URL = '/Additions/json/news.json';
 
   async function loadNews() {
     const response = await fetch(NEWS_URL);
@@ -25,7 +25,7 @@
     [...newsItems].reverse().forEach((newsItem) => {
       const card = document.createElement('a');
       card.className = 'newsCard';
-      card.href = `news-1.html?id=${encodeURIComponent(newsItem.id)}`;
+      card.href = `/news-1.html?id=${encodeURIComponent(newsItem.id)}`;
 
       if (newsItem.image) {
         const image = document.createElement('img');
