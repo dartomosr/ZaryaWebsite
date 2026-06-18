@@ -1,6 +1,4 @@
 ﻿using System.Text.Json;
-using System.Xml.Linq;
-using static WebApplication3.Pages.Admin.AddNewsModel;
 
 namespace ZaryaSite;
 

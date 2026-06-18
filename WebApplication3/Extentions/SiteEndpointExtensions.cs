@@ -2,9 +2,9 @@
 
 namespace ZaryaSite.Extentions;
 
-public static class SiteEndpointExtensions
+internal static class SiteEndpointExtensions
 {
-    public static void ConfigureSiteEndpoints(this WebApplication app)
+    internal static void ConfigureSiteEndpoints(this WebApplication app)
     {
         app.MapGet("/api/current-user", (ClaimsPrincipal user) => new
         {

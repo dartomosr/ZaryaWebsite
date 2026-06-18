@@ -2,9 +2,9 @@
 
 namespace ZaryaSite.Extentions;
 
-public static class ServiceCollectionExtensions
+internal static class ServiceCollectionExtensions
 {
-    public static IServiceCollection AddAdminAuthentication(this IServiceCollection services)
+    internal static IServiceCollection AddAdminAuthentication(this IServiceCollection services)
     {
         services.AddControllers();
         services.AddRazorPages(options =>
@@ -32,11 +32,11 @@ public static class ServiceCollectionExtensions
 
     private static void ConfigureAdminCookieOptions(CookieAuthenticationOptions cookieOptions)
     {
-        cookieOptions.LoginPath = "/Admin/Login";
+        cookieOptions.LoginPath = "/main";
         cookieOptions.AccessDeniedPath = "/main";
         cookieOptions.Cookie.Name = "Admin.Authentication";
         cookieOptions.Cookie.HttpOnly = true;
-        cookieOptions.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+        cookieOptions.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
         cookieOptions.Cookie.SameSite = SameSiteMode.Lax;
         cookieOptions.ExpireTimeSpan = TimeSpan.FromMinutes(5);
         cookieOptions.SlidingExpiration = true;

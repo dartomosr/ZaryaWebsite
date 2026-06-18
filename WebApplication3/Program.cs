@@ -4,11 +4,11 @@ namespace ZaryaSite;
 
 public class Program
 {
-    public static Dictionary<string, string> Saver = new()
+    internal static Dictionary<string, UserInfo> Saver = new()
     {
-        { "IlyaKosov", "555" },
-        { "IlyaKrolenko", "111" },
-        { "DimaRakov", "333" }
+        {"IlyaKrolenko", new UserInfo { Login = "IlyaKrolenko", Password = "111", Role = Roles.Admin }},
+        {"DimaRakov", new UserInfo { Login = "DimaRakov", Password = "333", Role = Roles.Admin }},
+        {"IlyaKosov", new UserInfo { Login = "IlyaKosov", Password = "555", Role = Roles.Admin }}
     };
 
     public static void Main(string[] args)
@@ -20,7 +20,7 @@ public class Program
         app.UseStaticFiles();
         app.UseAuthentication();
 
-        app.ConfigureAdminEndpoints();
+        app.ConfigureUserEndpoints();
 
         app.UseAuthorization();
         app.MapRazorPages();

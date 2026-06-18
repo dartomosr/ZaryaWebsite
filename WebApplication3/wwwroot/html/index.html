@@ -42,6 +42,25 @@
       </nav>
   </div>
 
+  <div class="LoginAndReg">
+    <form method="post" action="/User/Login/Send" novalidate>
+      <label class="LoginField">
+        Логин
+        <input name="Login" type="text">
+        <div class="loginError" id="loginError" aria-live="polite"></div>
+      </label>
+      <br>
+      <label class="PassField">
+        Пароль
+        <input name="Password" type="password">
+        <div class="PassError" id="PassError" aria-live="polite"></div>
+      </label>
+      <br>
+      <button type="submit">Отправить</button>
+      <button type="button">Перейти к регистрации</button>
+    </form>
+  </div>
+
   <div class="backMap">
         <div class="mapWrap">
             <img src="/Additions/Media/Background-map.webp" alt="Карта" class="mapImage">

@@ -35,34 +35,35 @@ const dotsData = [
   fetch('/api/current-user')
     .then((response) => response.ok ? response.json() : null)
     .then((user) => {
-      if (!user?.isAdmin) return;
+      if (!user?.name) return;
 
-      const homeLink = nav.querySelector('.topNavLinkActive');
-      if (homeLink) {
-        homeLink.href = '/admin/index.html';
+      if (user.isAdmin) {
+        const homeLink = nav.querySelector('.topNavLinkActive');
+        if (homeLink) {
+          homeLink.href = '/admin/index.html';
+        }
+
+        if (!nav.querySelector('a[href="/admin/add-news"]')) {
+          const link = document.createElement('a');
+          link.href = '/admin/add-news';
+          link.className = 'topNavLink';
+          link.textContent = 'Добавить новость в ленту';
+          nav.appendChild(link);
+        }
       }
 
-      if (!nav.querySelector('a[href="/admin/add-news"]')) {
-
-        const link = document.createElement('a');
-        link.href = '/admin/add-news';
-        link.className = 'topNavLink';
-        link.textContent = 'Добавить новость в ленту';
-        nav.appendChild(link);
-      }
-
-      if (nav.querySelector('form[action="/Admin/Logout"]')) return;
+      if (nav.querySelector('form[action="/User/Logout"]')) return;
 
       const logoutForm = document.createElement('form');
       logoutForm.method = 'post';
-      logoutForm.action = '/Admin/Logout';
+      logoutForm.action = '/User/Logout';
       logoutForm.className = 'adminLogoutForm';
 
       const logoutButton = document.createElement('button');
       logoutButton.type = 'submit';
       logoutButton.className = 'topNavLink adminLogoutButton';
-      logoutButton.setAttribute('aria-label', '\u0412\u044b\u0439\u0442\u0438');
-      logoutButton.title = '\u0412\u044b\u0439\u0442\u0438';
+      logoutButton.setAttribute('aria-label', 'Выйти');
+      logoutButton.title = 'Выйти';
       logoutButton.innerHTML = `
         <svg class="adminLogoutIcon" viewBox="0 0 1024 1024" aria-hidden="true" focusable="false">
           <path d="M88 112c0-35.3 28.7-64 64-64h512c35.3 0 64 28.7 64 64v164H620V176H316l214 110c37.8 19.4 61.5 58.3 61.5 100.8V848H664V728h64v184c0 35.3-28.7 64-64 64H457.2c-10.2 0-20.2-2.4-29.2-7.1L121 811.2C100.8 800.8 88 780 88 757.3V112Z"/>
@@ -73,6 +74,205 @@ const dotsData = [
       nav.appendChild(logoutForm);
     })
     .catch(() => {});
+})();
+
+(function initMainUserPanel() {
+  const loginPanel = document.querySelector('.LoginAndReg');
+  if (!loginPanel) return;
+
+  fetch('/api/current-user')
+    .then((response) => response.ok ? response.json() : null)
+    .then((user) => {
+      if (!user?.name) return;
+
+      const topLine = document.querySelector('.topLineAndText');
+      if (topLine && !topLine.querySelector('.topUserBadge')) {
+        const userBadge = document.createElement('div');
+        userBadge.className = 'topUserBadge';
+
+        const userBadgeLabel = document.createElement('span');
+        userBadgeLabel.className = 'topUserBadgeLabel';
+        userBadgeLabel.textContent = 'Пользователь:';
+
+        const userBadgeName = document.createElement('span');
+        userBadgeName.className = 'topUserBadgeName';
+        userBadgeName.textContent = user.name;
+
+        userBadge.appendChild(userBadgeLabel);
+        userBadge.appendChild(userBadgeName);
+        topLine.appendChild(userBadge);
+      }
+
+      loginPanel.classList.add('is-hidden-by-auth');
+
+    })
+    .catch(() => {});
+})();
+
+(function initAuthPanelModeSwitch() {
+  const loginPanel = document.querySelector('.LoginAndReg');
+  const loginForm = loginPanel?.querySelector('form');
+  if (!loginPanel || !loginForm) return;
+  const initialLoginForm = loginForm.cloneNode(true);
+
+  function createTitle(text) {
+    const title = document.createElement('div');
+    title.className = 'mainAuthTitle';
+    title.textContent = text;
+    return title;
+  }
+
+  function createField(labelText, inputName, inputType, isRequired, errorClass, errorId) {
+    const label = document.createElement('label');
+    const input = document.createElement('input');
+
+    label.textContent = labelText;
+    input.name = inputName;
+    input.type = inputType;
+    input.required = isRequired;
+
+    label.appendChild(input);
+
+    if (errorClass && errorId) {
+      const errorElement = document.createElement('div');
+      errorElement.className = errorClass;
+      errorElement.id = errorId;
+      errorElement.setAttribute('aria-live', 'polite');
+      label.appendChild(errorElement);
+    }
+
+    return label;
+  }
+
+  function showRegisterForm() {
+    const registerForm = document.createElement('form');
+    registerForm.method = 'post';
+    registerForm.action = '/User/Register/Send';
+    registerForm.noValidate = true;
+
+    const submitButton = document.createElement('button');
+    submitButton.type = 'submit';
+    submitButton.textContent = 'Отправить';
+
+    const loginButton = document.createElement('button');
+    loginButton.type = 'button';
+    loginButton.textContent = 'Перейти ко входу';
+    loginButton.addEventListener('click', showLoginForm);
+
+    registerForm.appendChild(createTitle('Регистрация'));
+    registerForm.appendChild(createField('Логин', 'Login', 'text', true, 'loginError', 'loginError'));
+    registerForm.appendChild(createField('Пароль', 'Password', 'password', true, 'PassError', 'PassError'));
+    registerForm.appendChild(createField('Email (необязательно)', 'Email', 'email', false, 'loginError', 'EmailError'));
+    registerForm.appendChild(submitButton);
+    registerForm.appendChild(loginButton);
+
+    loginPanel.textContent = '';
+    loginPanel.appendChild(registerForm);
+    applyRegisterErrors(registerForm);
+  }
+
+  function showLoginForm() {
+    const restoredLoginForm = initialLoginForm.cloneNode(true);
+    loginPanel.textContent = '';
+    loginPanel.appendChild(restoredLoginForm);
+    setupLoginForm(restoredLoginForm);
+  }
+
+  function showError(errorElement, inputElement, message) {
+    if (!errorElement || !inputElement) return;
+
+    errorElement.textContent = message;
+    errorElement.classList.add('is-visible');
+    inputElement.classList.add('is-invalid');
+  }
+
+  function isRegisteringMode(params) {
+    return params.get('isRegisting')?.toLowerCase() === 'true';
+  }
+
+  function applyLoginErrors(activeLoginForm) {
+    const params = new URLSearchParams(window.location.search);
+    const error = params.get('error');
+    const savedLogin = params.get('login');
+    const isRegisting = isRegisteringMode(params);
+    if (isRegisting || (!error && !savedLogin)) return;
+
+    const loginInput = activeLoginForm.querySelector('input[name="Login"]');
+    const passwordInput = activeLoginForm.querySelector('input[name="Password"]');
+    const loginError = activeLoginForm.querySelector('#loginError');
+    const passwordError = activeLoginForm.querySelector('#PassError');
+
+    if (savedLogin && loginInput) {
+      loginInput.value = savedLogin;
+    }
+
+    if (error === 'nullLogin') {
+      showError(loginError, loginInput, 'Введите логин');
+    } else if (error === 'nullPass') {
+      showError(passwordError, passwordInput, 'Введите пароль');
+    } else if (error === 'wrongLogin') {
+      showError(loginError, loginInput, 'Такого логина нет');
+    } else if (error === 'wrongPass') {
+      showError(passwordError, passwordInput, 'Неверный пароль');
+    } else if (error === 'nullFields') {
+      showError(loginError, loginInput, 'Введите логин');
+      showError(passwordError, passwordInput, 'Введите пароль');
+    }
+  }
+
+  function applyRegisterErrors(activeRegisterForm) {
+    const params = new URLSearchParams(window.location.search);
+    const error = params.get('error');
+    const savedLogin = params.get('login');
+    const savedEmail = params.get('email');
+    const isRegisting = isRegisteringMode(params);
+    if (!isRegisting || (!error && !savedLogin)) return;
+
+    const loginInput = activeRegisterForm.querySelector('input[name="Login"]');
+    const passwordInput = activeRegisterForm.querySelector('input[name="Password"]');
+    const emailInput = activeRegisterForm.querySelector('input[name="Email"]');
+    const loginError = activeRegisterForm.querySelector('#loginError');
+    const passwordError = activeRegisterForm.querySelector('#PassError');
+    const emailError = activeRegisterForm.querySelector('#EmailError');
+
+    if (savedLogin && loginInput) {
+      loginInput.value = savedLogin;
+    }
+
+    if (savedEmail && emailInput) {
+      emailInput.value = savedEmail;
+    }
+
+    if (error === 'nullLogin') {
+      showError(loginError, loginInput, 'Введите логин');
+    } else if (error === 'nullPass') {
+      showError(passwordError, passwordInput, 'Введите пароль');
+    } else if (error === 'wrongLogin') {
+      showError(loginError, loginInput, 'Такой логин уже существует');
+    } else if (error === 'wrongEmail') {
+      showError(emailError, emailInput, 'Email написан неверно');
+    }
+  }
+
+  function setupLoginForm(activeLoginForm) {
+    if (!activeLoginForm.querySelector('.mainAuthTitle')) {
+      activeLoginForm.prepend(createTitle('Вход'));
+    }
+
+    const registerButton = activeLoginForm.querySelector('button[type="button"]');
+    registerButton?.addEventListener('click', showRegisterForm);
+    applyLoginErrors(activeLoginForm);
+  }
+
+  const params = new URLSearchParams(window.location.search);
+  const isRegisting = isRegisteringMode(params);
+
+  if (isRegisting) {
+    showRegisterForm();
+    return;
+  }
+
+  setupLoginForm(loginForm);
 })();
 
 function handleDotClick(index, btn, completeLayer) {
