@@ -9,23 +9,26 @@ internal static class UserEndpointExtensions
 {
     internal static void ConfigureUserEndpoints(this WebApplication app)
     {
-        app.MapPost("/User/Login/Send", async (HttpContext context) =>
+        app.MapPost("/User/Login/Send", async (HttpContext context, ISaver saver) =>
         {
             var form = await context.Request.ReadFormAsync();
             var login = form["Login"].ToString();
             var password = form["Password"].ToString();
 
-            if (CheckRegisterAndLoginParam(login, password, out var savedUser, false) is IResult result)
+            var loginAttempt = new UserInfo()
+            {
+                Login = login,
+                Password = password,
+                Role = Roles.User
+            };
+
+            if (CheckRegisterAndLoginParam(loginAttempt, false, saver) is IResult result)
             {
                 return result;
             }
 
-            if (savedUser is null)
-            {
-                return Results.Redirect($"/main?error=wrongLogin&login={Uri.EscapeDataString(login)}");
-            }
-
-            await AuthenticationUser(context, savedUser);
+            var user = saver.Saver[login];
+            await AuthenticationUser(context, user);
             return Results.Redirect("/main");
         });
 
@@ -35,7 +38,7 @@ internal static class UserEndpointExtensions
             return Results.Redirect("/main");
         });
 
-        app.MapPost("/User/Register/Send", async (HttpContext context) =>
+        app.MapPost("/User/Register/Send", async (HttpContext context, ISaver saver) =>
         {
             var form = await context.Request.ReadFormAsync();
             var login = form["Login"].ToString();
@@ -50,56 +53,55 @@ internal static class UserEndpointExtensions
                 Role = Roles.User,
             };
 
-            if (CheckRegisterAndLoginParam(login, password, out var savedUser, true, email) is IResult result)
+            if (CheckRegisterAndLoginParam(newUser, true, saver) is IResult result)
             {
                 return result;
             }
 
-            Program.Saver[login] = newUser;
+            saver.Saver[login] = newUser;
             await AuthenticationUser(context, newUser);
             return Results.Redirect("/main");
         });
     }
 
-    private static IResult? CheckRegisterAndLoginParam(string login, string password, out UserInfo? user, bool isRegisting, string? email = null)
+    private static IResult? CheckRegisterAndLoginParam(UserInfo user, bool isRegisting, ISaver saver)
     {
-        user = null;
         var isRegistingValue = isRegisting.ToString().ToLowerInvariant();
-        var loginValue = Uri.EscapeDataString(login);
-        var emailQuery = isRegisting && !string.IsNullOrEmpty(email)
-            ? $"&email={Uri.EscapeDataString(email)}"
+        var loginValue = Uri.EscapeDataString(user.Login);
+        var emailQuery = isRegisting && !string.IsNullOrEmpty(user.Email)
+            ? $"&email={Uri.EscapeDataString(user.Email)}"
             : string.Empty;
 
-        if (string.IsNullOrEmpty(login))
+        if (string.IsNullOrEmpty(user.Login))
         {
             return Results.Redirect($"/main?error=nullLogin&isRegisting={isRegistingValue}{emailQuery}");
         }
 
-        if (string.IsNullOrEmpty(password))
+        if (string.IsNullOrEmpty(user.Password))
         {
             return Results.Redirect($"/main?error=nullPass&login={loginValue}&isRegisting={isRegistingValue}{emailQuery}");
         }
 
-        if (!isRegisting && !Program.Saver.TryGetValue(login, out user))
+        if (!isRegisting && !saver.Saver.TryGetValue(user.Login, out _))
         {
             return Results.Redirect($"/main?error=wrongLogin&login={loginValue}&isRegisting={isRegistingValue}");
         }
         
         if (isRegisting)
         {
-            if (Program.Saver.TryGetValue(login, out user))
+            if (saver.Saver.TryGetValue(user.Login, out _))
             {
                 return Results.Redirect($"/main?error=wrongLogin&login={loginValue}&isRegisting={isRegistingValue}{emailQuery}");
             }
 
-            if (!string.IsNullOrEmpty(email) && !Regex.IsMatch(email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
+            if (!string.IsNullOrEmpty(user.Email) && !Regex.IsMatch(user.Email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
             {
                 return Results.Redirect($"/main?error=wrongEmail&login={loginValue}&isRegisting={isRegistingValue}{emailQuery}");
             }
             return null;
         }
 
-        if (user is null || user.Password != password)
+        if (saver.Saver[user.Login].Password != user.Password)
         {
             return Results.Redirect($"/main?error=wrongPass&login={loginValue}&isRegisting={isRegistingValue}");
         }

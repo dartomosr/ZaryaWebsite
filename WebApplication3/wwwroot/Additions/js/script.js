@@ -38,11 +38,6 @@ const dotsData = [
       if (!user?.name) return;
 
       if (user.isAdmin) {
-        const homeLink = nav.querySelector('.topNavLinkActive');
-        if (homeLink) {
-          homeLink.href = '/admin/index.html';
-        }
-
         if (!nav.querySelector('a[href="/admin/add-news"]')) {
           const link = document.createElement('a');
           link.href = '/admin/add-news';
@@ -78,7 +73,6 @@ const dotsData = [
 
 (function initMainUserPanel() {
   const loginPanel = document.querySelector('.LoginAndReg');
-  if (!loginPanel) return;
 
   fetch('/api/current-user')
     .then((response) => response.ok ? response.json() : null)
@@ -103,7 +97,7 @@ const dotsData = [
         topLine.appendChild(userBadge);
       }
 
-      loginPanel.classList.add('is-hidden-by-auth');
+      loginPanel?.classList.add('is-hidden-by-auth');
 
     })
     .catch(() => {});
